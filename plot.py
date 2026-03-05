@@ -591,9 +591,13 @@ def plot_logical_coherence_crosstalk(
     # ax.legend(loc='lower left', fontsize=15)
 
 
-plot_comparison(path="results/rotated_sim.csv", fig_path="results/rotated_sim.png")
-plot_comparison(path="results/toric_sim.csv", fig_path="results/toric_sim.png")
-plot_comparison(path="results/surface_sim.csv", fig_path="results/surface_sim.png")
+# plot_comparison(path="results/rotated_sim.csv", fig_path="results/rotated_sim.png")
+# plot_comparison(path="results/toric_sim.csv", fig_path="results/toric_sim.png")
+# plot_comparison(path="results/surface_sim.csv", fig_path="results/surface_sim.png")
+plot_comparison(
+    path="results/bb_sim_no_pc_108_8_10_50000_100.csv",
+    fig_path="results/bb_sim_no_pc_108_8_10_50000_100.png",
+)
 
 
 """fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
