@@ -170,9 +170,11 @@ def plot_comparison(path, fig_path):
     ax2.set_xlim(1e-7, 1e-2)
     ax2.grid()
     ax2.set_ylabel(r"$p_L$", fontsize=16)
+    ax2.set_ylabel(r"$p_L$", fontsize=16)
     ax2.set_xlabel(r"$p$", fontsize=16)
     ax2.grid(visible=True, which="both")
     ax2.set_yticklabels([])
+    ax2.legend(fontsize=15)
     ax2.legend(fontsize=15)
 
     fig.savefig(fig_path, bbox_inches="tight")
@@ -605,8 +607,8 @@ plot_comparison(
     fig_path="results/bb_sim_no_pc_72_12_6_50000_100.png",
 )
 plot_comparison(
-    path="results/bb_sim_no_pc_108_8_10_50000_100.csv",
-    fig_path="results/bb_sim_no_pc_108_8_10_50000_100.png",
+    path="results/bb_sim_100000_100_100_7.csv",
+    fig_path="results/bb_sim_100000_100_100_7.png",
 )
 plot_comparison(
     path="results/bb_sim_no_pc_144_12_12_50000_100.csv",
