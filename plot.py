@@ -169,9 +169,11 @@ def plot_comparison(path, fig_path):
     ax2.set_ylim(1e-6, 1e-1)
     ax2.set_xlim(1e-7, 1e-2)
     ax2.grid()
+    ax2.set_ylabel(r"$p_L$", fontsize=16)
     ax2.set_xlabel(r"$p$", fontsize=16)
     ax2.grid(visible=True, which="both")
     ax2.set_yticklabels([])
+    ax2.legend(fontsize=15)
 
     fig.savefig(fig_path, bbox_inches="tight")
 
@@ -595,9 +597,21 @@ def plot_logical_coherence_crosstalk(
 # plot_comparison(path="results/toric_sim.csv", fig_path="results/toric_sim.png")
 # plot_comparison(path="results/surface_sim.csv", fig_path="results/surface_sim.png")
 plot_comparison(
+    path="results/bb_sim_no_pc_100000_100_10000_7_cycle_d.csv",
+    fig_path="results/bb_sim_no_pc_100000_100_10000_7_cycle_d.png",
+)
+"""plot_comparison(
+    path="results/bb_sim_no_pc_72_12_6_50000_100.csv",
+    fig_path="results/bb_sim_no_pc_72_12_6_50000_100.png",
+)
+plot_comparison(
     path="results/bb_sim_no_pc_108_8_10_50000_100.csv",
     fig_path="results/bb_sim_no_pc_108_8_10_50000_100.png",
 )
+plot_comparison(
+    path="results/bb_sim_no_pc_144_12_12_50000_100.csv",
+    fig_path="results/bb_sim_no_pc_144_12_12_50000_100.png",
+)"""
 
 
 """fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
