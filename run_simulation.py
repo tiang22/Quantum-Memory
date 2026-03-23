@@ -375,6 +375,80 @@ def bb_sim(
             print(sample.to_csv_line(), file=f)
 
 
+def bb_sim_crosstalk_only(
+    l_list,
+    m_list,
+    a_lists,
+    b_lists,
+    d_list,
+    max_shots,
+    max_errors,
+    p_list,
+    num_workers,
+    path,
+    bp_iters=100,
+    osd_ord=2,
+):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    custom_bposd = SinterDecoder_BPOSD(
+        max_bp_iters=bp_iters, osd_order=osd_ord, bp_method="ms"
+    )
+    custom_decoders = {"bposd": custom_bposd}
+
+    def generate_tasks(basis):
+        for l, m, a_list, b_list, d in zip(
+            l_list, m_list, a_lists, b_lists, d_list, strict=True
+        ):
+            for p in p_list:
+                yield sinter.Task(
+                    circuit=get_bivariate_bicycle_code_circuit_memory(
+                        l,
+                        m,
+                        a_list,
+                        b_list,
+                        d,
+                        np.inf,
+                        0.1,
+                        1.0,
+                        5.0,
+                        0,
+                        p,
+                        "full",
+                        "ms_realistic",
+                        basis=basis,
+                    )[0],
+                    decoder="bposd",
+                    json_metadata={
+                        "l": l,
+                        "m": m,
+                        "d": d,
+                        "r": d,
+                        "p": 0.0,
+                        "mode": "all",
+                        "pc": p,
+                        "basis": basis,
+                        "max_bp_iters": bp_iters,
+                        "osd_order": osd_ord,
+                    },
+                )
+
+    with open(path, "w") as f:
+        print(sinter.CSV_HEADER, file=f)
+
+        samples = sinter.collect(
+            num_workers=num_workers,
+            tasks=itertools.chain(generate_tasks("Z"), generate_tasks("X")),
+            max_shots=max_shots,
+            max_errors=max_errors,
+            hint_num_tasks=len(d_list) * len(p_list) * 2,  # XZ
+            decoders=["bposd"],
+            custom_decoders=custom_decoders,
+            print_progress=True,
+        )
+        for sample in samples:
+            print(sample.to_csv_line(), file=f)
+
+
 def bb_sim_basic(
     l_list,
     m_list,
@@ -631,7 +705,7 @@ if __name__ == "__main__":
         path="results/surface_sim.csv",
     )"""
 
-    bb_sim(
+    bb_sim_crosstalk_only(
         [6],
         [9],
         [[3, 1, 2]],
@@ -640,10 +714,8 @@ if __name__ == "__main__":
         100000,
         1000,
         np.power(10.0, np.linspace(-7.0, -1.0, num=31)).tolist(),
-        10 ** (-4.5),
         64,
         path="results/bb_sim_100000_1000_30_2.csv",
-        no_pc=False,
         bp_iters=30,
         osd_ord=1,
     )
